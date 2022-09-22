@@ -1,0 +1,30 @@
+using System;
+using System.Data;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace WindowsFormsApp4
+{
+    public partial class Form5 : Form
+    {
+        public Form5()
+        {
+            InitializeComponent();
+        }
+        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-QSR6JKT;Initial Catalog=master;Integrated Security=True");
+        SqlDataAdapter sda;
+        DataSet ds;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string executeQuery = textBox1.Text;
+            sda = new SqlDataAdapter(executeQuery,con);
+            ds = new DataSet();
+            sda.Fill(ds);
+            con.Close();
+            if(ds.Tables[0].Rows.Count!=0)
+            {
+                dataGridView1.DataSource = ds.Tables[0];
+            }
+        }
+    }
+}

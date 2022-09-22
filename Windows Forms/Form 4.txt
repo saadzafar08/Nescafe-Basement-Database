@@ -1,0 +1,134 @@
+using System;
+using System.Data;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace WindowsFormsApp4
+{
+    public partial class Form4 : Form
+    {
+        public Form4()
+        {
+            InitializeComponent();
+        }
+        SqlConnection connection = new SqlConnection(@"Data Source=DESKTOP-QSR6JKT;Initial Catalog=master;Integrated Security=True");
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = ("DELETE FROM Employe WHERE Employe_ID=" + textBox14.Text + "");
+            command.ExecuteNonQuery();
+            command.CommandText = ("DELETE FROM Instrument WHERE Instrument_name='" + textBox2.Text + "'");
+            command.ExecuteNonQuery();
+            command.CommandText = ("DELETE FROM Season WHERE Season_num=" + textBox3.Text + "");
+            command.ExecuteNonQuery();
+            command.CommandText = ("DELETE FROM Songs WHERE Song_ID=" + textBox1.Text + "");
+            command.ExecuteNonQuery();
+            command.CommandText = ("DELETE FROM Genre WHERE Genre_ID=" + textBox17.Text + "");
+            command.ExecuteNonQuery();
+            connection.Close();
+            MessageBox.Show("The record has been successfully deleted!");
+        }
+        public void displaySong()
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Song_ID, Title,Record_Date from Songs;";
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+            connection.Close();
+        }
+        public void displayEmployee()
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Employe_ID, name, C_Address, Cell_number from Employe;";
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView2.DataSource = dt;
+            connection.Close();
+        }
+        public void displayGenre()
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Genre_ID, type from genre;";
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView3.DataSource = dt;
+            connection.Close();
+        }
+        public void displayInstrument()
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Instrument_name from Instrument;";
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView4.DataSource = dt;
+            connection.Close();
+        }
+        public void displaySeason()
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Season_num from season;";
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView5.DataSource = dt;
+            connection.Close();
+        }
+        public void displayData()
+        {
+            displaySong();
+            displayEmployee();
+            displayGenre();
+            displaySeason();
+            displayInstrument();
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            displayData();
+        }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            textBox1.Text  = dataGridView1.Rows[e.RowIndex].Cells["Song_ID"].FormattedValue.ToString();
+            textBox12.Text = dataGridView1.Rows[e.RowIndex].Cells["Title"].FormattedValue.ToString();
+            textBox13.Text = dataGridView1.Rows[e.RowIndex].Cells["Record_Date"].FormattedValue.ToString();
+            textBox14.Text = dataGridView2.Rows[e.RowIndex].Cells["Employe_ID"].FormattedValue.ToString();
+            textBox22.Text = dataGridView2.Rows[e.RowIndex].Cells["name"].FormattedValue.ToString();
+            textBox15.Text = dataGridView2.Rows[e.RowIndex].Cells["C_Address"].FormattedValue.ToString();
+            textBox16.Text = dataGridView2.Rows[e.RowIndex].Cells["Cell_number"].FormattedValue.ToString();
+            textBox17.Text = dataGridView3.Rows[e.RowIndex].Cells["Genre_ID"].FormattedValue.ToString();
+            textBox18.Text = dataGridView3.Rows[e.RowIndex].Cells["type"].FormattedValue.ToString();
+            textBox2.Text = dataGridView4.Rows[e.RowIndex].Cells["Instrument_name"].FormattedValue.ToString();
+            textBox3.Text = dataGridView5.Rows[e.RowIndex].Cells["Season_num"].FormattedValue.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Form1 f1 = new Form1();
+            this.Hide();
+            f1.ShowDialog();
+        }
+    }
+
+}

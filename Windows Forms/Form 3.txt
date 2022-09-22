@@ -1,0 +1,100 @@
+using System;
+using System.Data;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace WindowsFormsApp4
+{
+    public partial class Form3 : Form
+    {
+        public Form3()
+        {
+            InitializeComponent();
+        }
+        SqlConnection connection = new SqlConnection(@"Data Source=DESKTOP-QSR6JKT;Initial Catalog=master;Integrated Security=True");
+        
+        private void button1_Click(object sender, EventArgs e)
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = ("UPDATE Songs SET Title = '" + textBox12.Text + "', Record_Date = '" + textBox13.Text+ "' WHERE Song_ID=" + textBox1.Text + "");
+            command.ExecuteNonQuery();
+            command.CommandText = ("UPDATE Employe SET name = '" + textBox22.Text + "',  C_Address = '" + textBox15.Text + "'WHERE Employe_ID=" + textBox14.Text + "");
+            command.ExecuteNonQuery();
+            command.CommandText = ("UPDATE Genre SET type = '" + textBox18.Text + "'WHERE Genre_ID =" + textBox17.Text + "");
+            command.ExecuteNonQuery();
+            connection.Close();
+            MessageBox.Show("Your data has been update successfully!");
+        }
+        public void displaySong()  
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Song_ID, Title,Record_Date from Songs;";  
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+            connection.Close();
+        }
+        public void displayEmployee()
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Employe_ID, name, C_Address, Cell_number from Employe;";
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView2.DataSource = dt;
+            connection.Close();
+        }
+        public void displayGenre()
+        {
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "select Genre_ID, type from genre;";
+            command.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            da.Fill(dt);
+            dataGridView3.DataSource = dt;
+            connection.Close();
+        }
+        public void displayData()
+        {
+            displaySong();
+            displayEmployee();
+            displayGenre();
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            displayData();
+        }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells["Song_ID"].FormattedValue.ToString();
+            textBox12.Text = dataGridView1.Rows[e.RowIndex].Cells["Title"].FormattedValue.ToString();
+            textBox13.Text = dataGridView1.Rows[e.RowIndex].Cells["Record_Date"].FormattedValue.ToString();
+            textBox14.Text = dataGridView2.Rows[e.RowIndex].Cells["Employe_ID"].FormattedValue.ToString();
+            textBox22.Text = dataGridView2.Rows[e.RowIndex].Cells["name"].FormattedValue.ToString();
+            textBox15.Text = dataGridView2.Rows[e.RowIndex].Cells["C_Address"].FormattedValue.ToString();
+            textBox16.Text = dataGridView2.Rows[e.RowIndex].Cells["Cell_number"].FormattedValue.ToString();
+            textBox17.Text = dataGridView3.Rows[e.RowIndex].Cells["Genre_ID"].FormattedValue.ToString();
+            textBox18.Text = dataGridView3.Rows[e.RowIndex].Cells["type"].FormattedValue.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Form1 f1 = new Form1();
+            this.Hide();
+            f1.ShowDialog();
+        }
+    }
+  
+}
